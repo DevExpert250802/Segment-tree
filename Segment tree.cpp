@@ -6,7 +6,7 @@ int a[N] , tree [4*N];
 
 void build (int node , int start ,int end)
     {
-        if(s==e){
+       if(s==e){
             tree[node] = a[start];
             return;
         }
