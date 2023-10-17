@@ -4,15 +4,15 @@ using namespace std;
 const int N =1e5+2;
 int a[N] , tree [4*N];
 
-void build (int node , int s ,int e)
+void build (int node , int start ,int end)
     {
         if(s==e){
-            tree[node] = a[s];
+            tree[node] = a[start];
             return;
         }
-        int mid = (s+e)/2;
-        build(2*node+1,s,mid);
-        build(2*node+2,mid+1,e);
+        int mid = (start+end)/2;
+        build(2*node+1,start,mid);
+        build(2*node+2,mid+1,end);
         tree[node]=tree[2*node+1]+tree[2*node+2];
     }
 
