@@ -8,10 +8,7 @@ Output
 Print m+1 lines: the maximum sum of numbers on a segment before all operations and after each operation.
 Please note that this segment may be empty (so the sum on it will be equal to 0).
 
-*/
 
-
-/* 
 
  Approach -->>
 In these kind of problems we require four variables for each segment of the segment tree
@@ -29,7 +26,24 @@ Left child - L, Right child - R.  Then the parent P’s properties are
 4. P.ans = max(L.ans, R.ans, L.suff + R.pref)
 
 (refer cf video)
+ 
+
+ Example
+ 
+input
+5 2
+5 -4 4 3 -5
+4 3
+3 -1
+
+output
+8
+11
+7
+
 */
+
+
 
 
 #include <bits/stdc++.h>
