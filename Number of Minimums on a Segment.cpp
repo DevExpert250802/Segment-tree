@@ -137,7 +137,7 @@ void update(int node, int st, int en, int idx, int val){
         tree[node].second = tree[2*node].second + tree[2*node+1].second;
     }
 }
-int main()
+signed main()
 {
     int n, m;
     cin >> n >> m;
