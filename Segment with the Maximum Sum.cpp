@@ -46,7 +46,7 @@ output
 
 
 
-#include <bits/stdc++.h>
+#include "bits/stdc++.h"
 using namespace std;
 #define int long long
 const int N = 1e5+2, MOD = 1e9+7;
@@ -77,14 +77,14 @@ void build(int node, int st, int en)
 
 
     int mid = (st + en)/2;
-    build(2*node, st, mid);
-    build(2*node+1, mid+1, en);
+    build(2*node+1, st, mid);
+    build(2*node+2, mid+1, en);
 
 
-    tree[node].sum = tree[2*node].sum + tree[2*node+1].sum;
-    tree[node].pref = max(tree[2*node].pref, tree[2*node].sum + tree[2*node+1].pref);
-    tree[node].suff = max(tree[2*node+1].suff, tree[2*node+1].sum + tree[2*node].suff);
-    tree[node].ans = max(tree[2*node].suff+tree[2*node+1].pref, max(tree[2*node].ans, tree[2*node+1].ans));
+    tree[node].sum = tree[2*node+1].sum + tree[2*node+2].sum;
+    tree[node].pref = max(tree[2*node+1].pref, tree[2*node+1].sum + tree[2*node+2].pref);
+    tree[node].suff = max(tree[2*node+2].suff, tree[2*node+2].sum + tree[2*node+1].suff);
+    tree[node].ans = max(tree[2*node+1].suff+tree[2*node+2].pref, max(tree[2*node+1].ans, tree[2*node+2].ans));
 
 
 }
@@ -106,16 +106,16 @@ void update(int node, int st, int en, int idx, int val){
 
     int mid = (st+en)/2;
     if(idx <= mid){
-        update(2*node, st, mid, idx, val);
+        update(2*node+1, st, mid, idx, val);
     }
     else
     {
-        update(2*node+1, mid+1, en, idx, val);
+        update(2*node+2, mid+1, en, idx, val);
     }
-    tree[node].sum = tree[2*node].sum + tree[2*node+1].sum;
-    tree[node].pref = max(tree[2*node].pref, tree[2*node].sum + tree[2*node+1].pref);
-    tree[node].suff = max(tree[2*node+1].suff, tree[2*node+1].sum + tree[2*node].suff);
-    tree[node].ans = max(tree[2*node].suff+tree[2*node+1].pref, max(tree[2*node].ans, tree[2*node+1].ans));
+    tree[node].sum = tree[2*node+1].sum + tree[2*node+2].sum;
+    tree[node].pref = max(tree[2*node+1].pref, tree[2*node+1].sum + tree[2*node+2].pref);
+    tree[node].suff = max(tree[2*node+2].suff, tree[2*node+2].sum + tree[2*node+1].suff);
+    tree[node].ans = max(tree[2*node+1].suff+tree[2*node+2].pref, max(tree[2*node+1].ans, tree[2*node+2].ans));
 }
 
 
@@ -130,16 +130,18 @@ signed main()
     }
 
 
-    build(1,0,n-1);
-    cout << tree[1].ans << endl;
+    build(0,0,n-1);
+    cout << tree[0].ans << endl;
 
 
     while(m--){
         int idx,val;
         cin >> idx >> val;
-        update(1,0,n-1,idx,val);
-        cout << tree[1].ans << endl;
+        update(0,0,n-1,idx,val);
+        cout << tree[0].ans << endl;
     }
     return 0;
 }
+
+
 
