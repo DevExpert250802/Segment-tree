@@ -1,6 +1,22 @@
+/*
+input :  
+8 3
+1 2 1 4 2 3 1 1
+2 1 5
+1 2 10
+2 1 5
+
+output :
+12
+21
+
+*/
+
+/* Segment Tree Standard Code (Without Lazy) */
+
+
 #include <bits/stdc++.h>
 using namespace std;
-
 
 /* Segment Tree Standard Code (Without Lazy) */
 class SegTree {
@@ -13,6 +29,8 @@ public:
         N = l;
         tree.resize(4 * N);
     }
+    
+    
 
     // Build Segment Tree -- build(arr, 1, 0, N-1); 
     void build(vector<int>& arr, int node, int start, int end) {
@@ -25,11 +43,57 @@ public:
         build(arr, 2 * node + 1, mid + 1, end);
         tree[node] = tree[2 * node] + tree[2 * node + 1]; // Sum after backtracking
     }
+    
+    
+
+    // Query input question is = [l, r] included -- query(1, 0, len-1, l, r)
+    int query(int node, int start, int end, int l, int r) {
+        if (start > r || end < l) return 0; // no overlap
+        if (l <= start && end <= r) return tree[node]; // Full overlap
+        
+        // Partial Overlap
+        int mid = (start + end) / 2;
+        int q1 = query(2 * node, start, mid, l, r);
+        int q2 = query(2 * node + 1, mid + 1, end, l, r);
+        return q1 + q2;
+    }
+
+
+
+    // Update at index(ind) of array(tree) to a value(val)
+    void update(int node, int start, int end, int ind, int val) {
+        if (start == ind && end == ind) {
+            tree[node] = val;
+            return;
+        }
+        if (ind > end || ind < start) return; // out of range
+
+        int mid = (start + end) / 2;
+        update(2 * node, start, mid, ind, val);
+        update(2 * node + 1, mid + 1, end, ind, val);
+        tree[node] = tree[2 * node] + tree[2 * node + 1];
+    }
+
+
+
+    // Overridden functions
+    void build(vector<int>& arr) {
+        build(arr, 1, 0, N - 1);
+    }
+    int query(int l, int r) {
+        return query(1, 0, N - 1, l, r);
+    }
+    void update(int ind, int val) {
+        update(1, 0, N - 1, ind, val);
+    }
+    
 };
 
+
+
 int main() {
-    int n;
-    cin >> n;
+    int n, m;
+    cin >>n>>m;  // read n and m
 
     vector<int> arr(n, 0);
     for (int i = 0; i < n; i++) {
@@ -38,14 +102,23 @@ int main() {
 
     // Create Object 
     SegTree segTree(n);
-    segTree.build(arr, 1, 0, n - 1);    // Accessing member functions
+    segTree.build(arr);    // Accessing member functions
 
-    // Build - View Build Data
-    for (int i = 1; i <  2*n; i++) {  // Printing only the relevant part of the segment tree
-        cout << segTree.tree[i] << " ";
+    while (m--) {
+        int type;
+        cin >> type;
+        
+        if (type == 1) {
+            int ind, val;
+            cin >> ind >> val;
+            segTree.update(ind, val);
+        } else if (type == 2) {
+            int l, r;
+            cin >> l >> r;
+            int ans = segTree.query(l, r);
+            cout << ans << endl;
+        }
     }
-    cout << endl;
 
     return 0;
 }
-
