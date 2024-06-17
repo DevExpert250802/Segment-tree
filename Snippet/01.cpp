@@ -5,7 +5,7 @@ using namespace std;
 /* Segment Tree Standard Code (Without Lazy) */
 class SegTree {
 public:
-    int N;Build 
+    int N;
     vector<int> tree;
 
     SegTree() {}
@@ -28,9 +28,6 @@ public:
 };
 
 int main() {
-    // Shortcut to run the program is Ctrl + Shift + B
-    // Shortcut to run using separate test is Ctrl + Alt + B
-
     int n;
     cin >> n;
 
@@ -51,3 +48,4 @@ int main() {
 
     return 0;
 }
+
