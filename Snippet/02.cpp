@@ -1,3 +1,16 @@
+/*
+input:
+8 3
+1 1 1 1 1 1 1 1
+2 1 5
+1 1 5 10
+2 1 5
+
+Output : 
+5    
+50
+*/
+
 /* Segment Tree Lazy Propogation Code (Not Generic Code) */
 
 
@@ -14,8 +27,8 @@ public:
     SegTree(int len) {
         N = len;
         tree.resize(4 * len);
-        isLazy.resize(4 * len, false);
-        unpropUpd.resize(4 * len, 0);
+        isLazy.resize(4 * len);
+        unpropUpd.resize(4 * len);
     }
 
 
@@ -60,8 +73,10 @@ public:
     // Query input question is = [l, r] included -- query(1, 0, len-1, l, r)
     int query(int node, int start, int end, int l, int r) {
         if (start > r || end < l) return 0; // no overlap
-        pushDown(node, start, end); // propagate any pending updates before querying
         if (l <= start && end <= r) return tree[node]; // Full overlap
+        
+        //partial overlap
+        pushDown(node, start, end); // propagate any pending updates before querying
         int mid = (start + end) / 2;
         int q1 = query(2 * node, start, mid, l, r);
         int q2 = query(2 * node + 1, mid + 1, end, l, r);
@@ -72,12 +87,15 @@ public:
 
     // Update at index(ind) of array(tree) to a value(val)
     void updateRange(int node, int start, int end, int l, int r, int val) {
-        pushDown(node, start, end); // propagate any pending updates before updating
-        if (start > r || end < l) return; // out of range
+      // reachead the leaf node 
         if (l <= start && end <= r) { // full overlap
             apply(node, start, end, val);
             return;
         }
+        if (start > r || end < l) return; // no overlap
+         
+         //partial overlap
+        pushDown(node, start, end); // propagate any pending updates before updating
         int mid = (start + end) / 2;
         updateRange(2 * node, start, mid, l, r, val);
         updateRange(2 * node + 1, mid + 1, end, l, r, val);
